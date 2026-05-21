@@ -2,53 +2,27 @@
 	"build": {
 		"beforeDevCommand": "pnpm run dev",
 		"beforeBuildCommand": "pnpm run build",
-		"devPath": "http://localhost:1420",
-		"distDir": "../dist",
-		"withGlobalTauri": true
+		"devUrl": "http://localhost:1420",
+		"frontendDist": "../dist"
 	},
-	"package": {
-		"productName": "Google Chat",
-		"version": "0.0.8"
-	},
-	"tauri": {
+	"productName": "Google Chat",
+	"version": "0.0.8",
+	"identifier": "io.github.davidrneves.google-chat-tauri",
+	"app": {
 		"security": {
 			"csp": "default-src 'self'",
-			"dangerousRemoteDomainIpcAccess": [
+			"capabilities": [
 				{
-					"domain": "chat.google.com",
-					"enableTauriAPI": true,
-					"windows": ["main"]
-				},
-				{
-					"domain": "mail.google.com",
-					"enableTauriAPI": true,
-					"windows": ["main"]
+					"identifier": "default",
+					"description": "Default app capability",
+					"windows": ["main"],
+					"permissions": [
+						"shell:allow-open",
+						"notification:allow-is-permission-granted",
+						"notification:allow-request-permission",
+						"notification:allow-notify"
+					]
 				}
-			]
-		},
-		"allowlist": {
-			"all": false,
-			"notification": {
-				"all": true
-			},
-			"path": {
-				"all": false
-			},
-			"shell": {
-				"open": true
-			}
-		},
-		"bundle": {
-			"active": true,
-			"targets": "all",
-			"category": "Productivity",
-			"identifier": "io.github.davidrneves.google-chat-tauri",
-			"icon": [
-				"icons/32x32.png",
-				"icons/128x128.png",
-				"icons/128x128@2x.png",
-				"icons/icon.icns",
-				"icons/icon.ico"
 			]
 		},
 		"windows": [
@@ -62,12 +36,22 @@
 				"userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36"
 			}
 		],
-		"systemTray": {
-			"iconAsTemplate": false,
-			"iconPath": "icons/128x128.png"
-		},
-		"updater": {
-			"active": false
+		"trayIcon": {
+			"id": "main",
+			"iconPath": "icons/128x128.png",
+			"iconAsTemplate": false
 		}
+	},
+	"bundle": {
+		"active": true,
+		"targets": "all",
+		"category": "Productivity",
+		"icon": [
+			"icons/32x32.png",
+			"icons/128x128.png",
+			"icons/128x128@2x.png",
+			"icons/icon.icns",
+			"icons/icon.ico"
+		]
 	}
 }

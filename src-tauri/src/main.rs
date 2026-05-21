@@ -2,10 +2,10 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
 use tauri::{
-    CustomMenuItem, SystemTray, SystemTrayEvent, SystemTrayMenu, SystemTrayMenuItem,
-    SystemTrayMenuItemHandle,
+    menu::{MenuBuilder, MenuItemBuilder},
+    tray::{MouseButton, MouseButtonState, TrayIconBuilder, TrayIconEvent},
+    Emitter, Manager,
 };
-use tauri::Manager;
 
 #[derive(Clone, serde::Serialize)]
 struct Payload {
@@ -14,58 +14,69 @@ struct Payload {
 }
 
 fn main() {
-    let quit = CustomMenuItem::new("quit".to_string(), "Quit");
-    let hide = CustomMenuItem::new("hide".to_string(), "Hide");
-    let tray_menu = SystemTrayMenu::new()
-        .add_item(quit)
-        .add_native_item(SystemTrayMenuItem::Separator)
-        .add_item(hide);
-
     tauri::Builder::default()
-        .plugin(tauri_plugin_single_instance::init(|app, argv, cwd| {
-            let _ = app.emit_all("single-instance", Payload { args: argv, cwd });
-        }))
         .plugin(tauri_plugin_persisted_scope::init())
-        .system_tray(SystemTray::new().with_menu(tray_menu))
-        .on_system_tray_event(|app, event| match event {
-            SystemTrayEvent::MenuItemClick { id, .. } => {
-                let item_handle: SystemTrayMenuItemHandle = app.tray_handle().get_item(&id);
-                match id.as_str() {
+        .plugin(tauri_plugin_notification::init())
+        .plugin(tauri_plugin_shell::init())
+        .setup(|app| {
+            #[cfg(desktop)]
+            app.handle().plugin(tauri_plugin_single_instance::init(|app, argv, cwd| {
+                let _ = app.emit("single-instance", Payload { args: argv, cwd });
+            }))?;
+
+            let quit = MenuItemBuilder::with_id("quit", "Quit").build(app)?;
+            let hide = MenuItemBuilder::with_id("hide", "Hide").build(app)?;
+            let menu = MenuBuilder::new(app)
+                .items(&[&hide, &quit])
+                .build()?;
+
+            let _tray = TrayIconBuilder::new()
+                .menu(&menu)
+                .on_menu_event(|app, event| match event.id().as_ref() {
                     "quit" => {
                         std::process::exit(0);
                     }
                     "hide" => {
-                        if let Some(window) = app.get_window("main") {
+                        if let Some(window) = app.get_webview_window("main") {
                             if let Ok(visible) = window.is_visible() {
                                 if visible {
                                     let _ = window.hide();
-                                    let _ = item_handle.set_title("Show");
                                 } else {
                                     let _ = window.show();
-                                    let _ = item_handle.set_title("Hide");
                                 }
                             }
                         }
                     }
                     _ => {}
-                }
-            }
-            _ => {}
-        })
-        .on_window_event(|event| match event.event() {
-            tauri::WindowEvent::CloseRequested { api, .. } => {
-                let _ = event.window().hide();
-                api.prevent_close();
-            }
-            _ => {}
-        })
+                })
+                .on_tray_icon_event(|tray, event| {
+                    if let TrayIconEvent::Click {
+                        button: MouseButton::Left,
+                        button_state: MouseButtonState::Up,
+                        ..
+                    } = event
+                    {
+                        let app = tray.app_handle();
+                        if let Some(window) = app.get_webview_window("main") {
+                            let _ = window.show();
+                            let _ = window.set_focus();
+                        }
+                    }
+                })
+                .build(app)?;
 
-        .setup(|app| {
-            let window = app.get_window("main").unwrap();
+            let window = app.get_webview_window("main").unwrap();
             tauri::async_runtime::spawn(async move {
                 let _ = window.eval("window.location.replace('https://mail.google.com/chat/u/0')");
             });
+
             Ok(())
+        })
+        .on_window_event(|window, event| {
+            if let tauri::WindowEvent::CloseRequested { api, .. } = event {
+                let _ = window.hide();
+                api.prevent_close();
+            }
         })
         .run(tauri::generate_context!())
         .expect("error running tauri app");

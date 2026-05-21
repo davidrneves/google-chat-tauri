@@ -1,7 +1,7 @@
 import {
   isPermissionGranted,
   requestPermission,
-} from "@tauri-apps/api/notification";
+} from "@tauri-apps/plugin-notification";
 
 try {
   let permissionGranted = await isPermissionGranted();
