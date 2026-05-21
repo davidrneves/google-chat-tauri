@@ -2,7 +2,7 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
 use tauri::{
-    menu::{MenuBuilder, MenuItemBuilder},
+    menu::{MenuBuilder, MenuItemBuilder, PredefinedMenuItem, SubmenuBuilder},
     tray::{MouseButton, MouseButtonState, TrayIconBuilder, TrayIconEvent},
     Emitter, Manager,
 };
@@ -37,12 +37,44 @@ fn main() {
 
             let quit = MenuItemBuilder::with_id("quit", "Quit").build(app)?;
             let hide = MenuItemBuilder::with_id("hide", "Hide").build(app)?;
-            let menu = MenuBuilder::new(app)
+            let tray_menu = MenuBuilder::new(app)
                 .items(&[&hide, &quit])
                 .build()?;
 
+            let reload = MenuItemBuilder::with_id("reload", "Reload")
+                .accelerator("CmdOrCtrl+R")
+                .build(app)?;
+            let new_window = MenuItemBuilder::with_id("new_window", "New Window")
+                .accelerator("CmdOrCtrl+N")
+                .build(app)?;
+            let app_menu_quit = MenuItemBuilder::with_id("app_quit", "Quit Google Chat")
+                .accelerator("CmdOrCtrl+Q")
+                .build(app)?;
+
+            let file_submenu = SubmenuBuilder::new(app, "File")
+                .items(&[&new_window, &app_menu_quit])
+                .build()?;
+            let view_submenu = SubmenuBuilder::new(app, "View")
+                .items(&[
+                    &reload,
+                    &PredefinedMenuItem::fullscreen(app, None)?,
+                ])
+                .build()?;
+            let window_submenu = SubmenuBuilder::new(app, "Window")
+                .items(&[
+                    &PredefinedMenuItem::minimize(app, None)?,
+                    &PredefinedMenuItem::maximize(app, None)?,
+                    &PredefinedMenuItem::close_window(app, None)?,
+                ])
+                .build()?;
+
+            let app_menu = MenuBuilder::new(app)
+                .items(&[&file_submenu, &view_submenu, &window_submenu])
+                .build()?;
+            app.set_menu(app_menu)?;
+
             let _tray = TrayIconBuilder::with_id("main")
-                .menu(&menu)
+                .menu(&tray_menu)
                 .on_menu_event(|app, event| match event.id().as_ref() {
                     "quit" => {
                         std::process::exit(0);
@@ -114,6 +146,22 @@ fn main() {
             });
 
             Ok(())
+        })
+        .on_menu_event(|app, event| match event.id().as_ref() {
+            "reload" => {
+                if let Some(win) = app.get_webview_window("main") {
+                    let _ = win.eval("location.reload()");
+                }
+            }
+            "new_window" | "hide" => {
+                if let Some(win) = app.get_webview_window("main") {
+                    if let Ok(visible) = win.is_visible() {
+                        if visible { let _ = win.hide(); } else { let _ = win.show(); }
+                    }
+                }
+            }
+            "app_quit" | "quit" => std::process::exit(0),
+            _ => {}
         })
         .on_window_event(|window, event| {
             if let tauri::WindowEvent::CloseRequested { api, .. } = event {
