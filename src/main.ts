@@ -3,8 +3,12 @@ import {
   requestPermission,
 } from "@tauri-apps/api/notification";
 
-let permissionGranted = await isPermissionGranted();
-if (!permissionGranted) {
-  const permission = await requestPermission();
-  permissionGranted = permission === "granted";
+try {
+  let permissionGranted = await isPermissionGranted();
+  if (!permissionGranted) {
+    const permission = await requestPermission();
+    permissionGranted = permission === "granted";
+  }
+} catch (e) {
+  console.error("Notification permission request failed", e);
 }
