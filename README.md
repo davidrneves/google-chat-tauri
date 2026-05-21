@@ -39,8 +39,8 @@ Plans:
   - [ ] Flathub
 - [x] System tray
   - [x] Reactive tooltip showing unread count
-  - [ ] Dock/taskbar badge (pending tauri-plugin-badging v2 availability)
-  - [ ] Fix monochrome on non-macOS
+  - [x] Dock/taskbar badge (macOS only; tauri-plugin-badging unavailable for v2)
+  - [x] Fix monochrome on non-macOS
 - [x] Native window materials (macOS vibrancy, Windows Mica)
 - [x] Native menu bar (File, View, Window)
 - [ ] Custom CSS & JS

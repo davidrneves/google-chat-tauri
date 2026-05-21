@@ -92,7 +92,7 @@ fn main() {
                 .build()?;
             app.set_menu(app_menu)?;
 
-            let _tray = TrayIconBuilder::with_id("main")
+            let tray_builder = TrayIconBuilder::with_id("main")
                 .menu(&tray_menu)
                 .on_menu_event(|app, event| match event.id().as_ref() {
                     "quit" => {
@@ -124,8 +124,12 @@ fn main() {
                             let _ = window.set_focus();
                         }
                     }
-                })
-                .build(app)?;
+                });
+
+            #[cfg(target_os = "macos")]
+            let tray_builder = tray_builder.icon_as_template(true);
+
+            let _tray = tray_builder.build(app)?;
 
             #[cfg(any(target_os = "macos", target_os = "windows"))]
             let window = app.get_webview_window("main").unwrap();

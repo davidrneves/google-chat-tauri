@@ -41,7 +41,7 @@
 		"trayIcon": {
 			"id": "main",
 			"iconPath": "icons/128x128.png",
-			"iconAsTemplate": false
+			"iconAsTemplate": true
 		}
 	},
 	"bundle": {
