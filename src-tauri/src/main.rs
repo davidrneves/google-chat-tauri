@@ -24,6 +24,25 @@ struct Payload {
     cwd: String,
 }
 
+#[cfg(target_os = "macos")]
+fn set_dock_badge(count: u32) {
+    use std::ffi::CString;
+    unsafe {
+        use objc::{class, msg_send, sel, sel_impl};
+        let app: *mut objc::runtime::Object = msg_send![class!(NSApplication), sharedApplication];
+        let dock_tile: *mut objc::runtime::Object = msg_send![app, dockTile];
+        if count > 0 {
+            let label = CString::new(count.to_string()).unwrap();
+            let ns_label: *mut objc::runtime::Object =
+                msg_send![class!(NSString), stringWithUTF8String: label.as_ptr()];
+            let _: () = msg_send![dock_tile, setBadgeLabel: ns_label];
+        } else {
+            let null: *mut objc::runtime::Object = std::ptr::null_mut();
+            let _: () = msg_send![dock_tile, setBadgeLabel: null];
+        }
+    }
+}
+
 fn main() {
     tauri::Builder::default()
         .plugin(tauri_plugin_persisted_scope::init())
@@ -108,6 +127,7 @@ fn main() {
                 })
                 .build(app)?;
 
+            #[cfg(any(target_os = "macos", target_os = "windows"))]
             let window = app.get_webview_window("main").unwrap();
 
             #[cfg(target_os = "macos")]
@@ -117,10 +137,6 @@ fn main() {
             #[cfg(target_os = "windows")]
             apply_mica(&window, None)
                 .expect("Failed to apply Mica");
-
-            tauri::async_runtime::spawn(async move {
-                let _ = window.eval("window.location.replace('https://mail.google.com/chat/u/0')");
-            });
 
             let poll_handle = app.handle().clone();
             std::thread::spawn(move || {
@@ -140,6 +156,13 @@ fn main() {
                                 "Google Chat".to_string()
                             };
                             let _ = tray.set_tooltip(Some(&tooltip));
+                        }
+                        #[cfg(target_os = "macos")]
+                        {
+                            let badge_count = count;
+                            let _ = poll_handle.run_on_main_thread(move || {
+                                set_dock_badge(badge_count);
+                            });
                         }
                     }
                 }

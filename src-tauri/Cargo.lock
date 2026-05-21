@@ -1393,6 +1393,7 @@ dependencies = [
 name = "google-chat-tauri"
 version = "0.1.0"
 dependencies = [
+ "objc",
  "serde",
  "serde_json",
  "tauri",
