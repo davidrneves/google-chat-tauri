@@ -6,7 +6,7 @@
 		"frontendDist": "../dist"
 	},
 	"productName": "Google Chat",
-	"version": "0.0.8",
+	"version": "0.1.0",
 	"identifier": "io.github.davidrneves.google-chat-tauri",
 	"app": {
 		"security": {

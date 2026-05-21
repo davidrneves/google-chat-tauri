@@ -16,7 +16,7 @@ yay -S google-chat-tauri-bin
 
 Tech stack:
 
-[![tauri badge](https://img.shields.io/badge/made_with-tauri-FFC131?logo=tauri&style=for-the-badge)](https://tauri.app) [![vite badge](https://img.shields.io/badge/bundled_with-vite-BC33FE?logo=vite&style=for-the-badge)](https://vitejs.dev) [![rust badge](https://img.shields.io/badge/powered_by-rust-DEA584?logo=rust&style=for-the-badge)](https://www.typescriptlang.org/)
+[![tauri badge](https://img.shields.io/badge/made_with-tauri_v2-FFC131?logo=tauri&style=for-the-badge)](https://tauri.app) [![vite badge](https://img.shields.io/badge/bundled_with-vite-BC33FE?logo=vite&style=for-the-badge)](https://vitejs.dev) [![rust badge](https://img.shields.io/badge/powered_by-rust-DEA584?logo=rust&style=for-the-badge)](https://www.typescriptlang.org/)
 
 Obligatory screenshot:
 
@@ -38,9 +38,11 @@ Plans:
   - [x] [AUR package](https://aur.archlinux.org/packages/google-chat-tauri-bin)
   - [ ] Flathub
 - [x] System tray
-  - [ ] Add options
-  - [ ] Reactive for notifications
+  - [x] Reactive tooltip showing unread count
+  - [ ] Dock/taskbar badge (pending tauri-plugin-badging v2 availability)
   - [ ] Fix monochrome on non-macOS
+- [x] Native window materials (macOS vibrancy, Windows Mica)
+- [x] Native menu bar (File, View, Window)
 - [ ] Custom CSS & JS
 - [ ] Custom settings
   - [ ] Config file
