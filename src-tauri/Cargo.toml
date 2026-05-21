@@ -18,6 +18,7 @@ tauri-plugin-single-instance = "2"
 tauri-plugin-persisted-scope = "2"
 tauri-plugin-notification = "2"
 tauri-plugin-shell = "2"
+window-vibrancy = "0.6"
 
 [features]
 custom-protocol = ["tauri/custom-protocol"]

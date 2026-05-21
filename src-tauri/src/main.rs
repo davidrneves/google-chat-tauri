@@ -6,6 +6,10 @@ use tauri::{
     tray::{MouseButton, MouseButtonState, TrayIconBuilder, TrayIconEvent},
     Emitter, Manager,
 };
+#[cfg(target_os = "macos")]
+use window_vibrancy::{apply_vibrancy, NSVisualEffectMaterial};
+#[cfg(target_os = "windows")]
+use window_vibrancy::apply_mica;
 
 #[derive(Clone, serde::Serialize)]
 struct Payload {
@@ -66,6 +70,15 @@ fn main() {
                 .build(app)?;
 
             let window = app.get_webview_window("main").unwrap();
+
+            #[cfg(target_os = "macos")]
+            apply_vibrancy(&window, NSVisualEffectMaterial::Sidebar, None, Some(10.0))
+                .expect("Failed to apply vibrancy");
+
+            #[cfg(target_os = "windows")]
+            apply_mica(&window, None)
+                .expect("Failed to apply Mica");
+
             tauri::async_runtime::spawn(async move {
                 let _ = window.eval("window.location.replace('https://mail.google.com/chat/u/0')");
             });
