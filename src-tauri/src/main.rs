@@ -23,10 +23,7 @@ fn main() {
 
     tauri::Builder::default()
         .plugin(tauri_plugin_single_instance::init(|app, argv, cwd| {
-            println!("{}, {argv:?}, {cwd}", app.package_info().name);
-
-            app.emit_all("single-instance", Payload { args: argv, cwd })
-                .unwrap();
+            let _ = app.emit_all("single-instance", Payload { args: argv, cwd });
         }))
         .plugin(tauri_plugin_persisted_scope::init())
         .system_tray(SystemTray::new().with_menu(tray_menu))
@@ -38,14 +35,16 @@ fn main() {
                         std::process::exit(0);
                     }
                     "hide" => {
-                        let window = app.get_window("main").unwrap();
-                        let visible = window.is_visible().expect("Cannot find window, somehow");
-                        if visible {
-                            window.hide().unwrap();
-                            item_handle.set_title("Show").unwrap();
-                        } else {
-                            window.show().unwrap();
-                            item_handle.set_title("Hide").unwrap();
+                        if let Some(window) = app.get_window("main") {
+                            if let Ok(visible) = window.is_visible() {
+                                if visible {
+                                    let _ = window.hide();
+                                    let _ = item_handle.set_title("Show");
+                                } else {
+                                    let _ = window.show();
+                                    let _ = item_handle.set_title("Hide");
+                                }
+                            }
                         }
                     }
                     _ => {}
@@ -55,7 +54,7 @@ fn main() {
         })
         .on_window_event(|event| match event.event() {
             tauri::WindowEvent::CloseRequested { api, .. } => {
-                event.window().hide().unwrap();
+                let _ = event.window().hide();
                 api.prevent_close();
             }
             _ => {}
@@ -64,18 +63,7 @@ fn main() {
         .setup(|app| {
             let window = app.get_window("main").unwrap();
             tauri::async_runtime::spawn(async move {
-                println!("Initializing...");
-
-                let _loader = window.eval("window.location.replace('https://mail.google.com/chat/u/0')");
-
-                let _hide = window.hide();
-                // let _loader = window.eval("window.location.replace('https://mail.google.com/chat/u/0')");
-
-                window
-                    .get_window("main")
-                    .expect("no window labeled 'main' found")
-                    .show()
-                    .unwrap();
+                let _ = window.eval("window.location.replace('https://mail.google.com/chat/u/0')");
             });
             Ok(())
         })
