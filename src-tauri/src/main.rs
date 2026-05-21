@@ -199,3 +199,129 @@ fn main() {
         .run(tauri::generate_context!())
         .expect("error running tauri app");
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_parse_unread_count_with_number() {
+        // Arrange
+        let title = "(5) Google Chat";
+
+        // Act
+        let result = parse_unread_count(title);
+
+        // Assert
+        assert_eq!(result, 5);
+    }
+
+    #[test]
+    fn test_parse_unread_count_without_parens() {
+        // Arrange
+        let title = "Google Chat";
+
+        // Act
+        let result = parse_unread_count(title);
+
+        // Assert
+        assert_eq!(result, 0);
+    }
+
+    #[test]
+    fn test_parse_unread_count_with_zero() {
+        // Arrange
+        let title = "(0) Google Chat";
+
+        // Act
+        let result = parse_unread_count(title);
+
+        // Assert
+        assert_eq!(result, 0);
+    }
+
+    #[test]
+    fn test_parse_unread_count_with_large_number() {
+        // Arrange
+        let title = "(99) Google Chat";
+
+        // Act
+        let result = parse_unread_count(title);
+
+        // Assert
+        assert_eq!(result, 99);
+    }
+
+    #[test]
+    fn test_parse_unread_count_with_letters() {
+        // Arrange
+        let title = "(abc) Google Chat";
+
+        // Act
+        let result = parse_unread_count(title);
+
+        // Assert
+        assert_eq!(result, 0);
+    }
+
+    #[test]
+    fn test_parse_unread_count_with_empty_parens() {
+        // Arrange
+        let title = "() Google Chat";
+
+        // Act
+        let result = parse_unread_count(title);
+
+        // Assert
+        assert_eq!(result, 0);
+    }
+
+    #[test]
+    fn test_parse_unread_count_without_closing_paren() {
+        // Arrange
+        let title = "(1 Google Chat";
+
+        // Act
+        let result = parse_unread_count(title);
+
+        // Assert
+        assert_eq!(result, 0);
+    }
+
+    #[test]
+    fn test_parse_unread_count_with_empty_string() {
+        // Arrange
+        let title = "";
+
+        // Act
+        let result = parse_unread_count(title);
+
+        // Assert
+        assert_eq!(result, 0);
+    }
+
+    #[test]
+    fn test_parse_unread_count_leading_close_paren_returns_zero() {
+        // Arrange: title starts with ')' not '(' -- guards against strip_prefix('(') -> strip_prefix(')')
+        let title = ")5( Google Chat";
+
+        // Act
+        let result = parse_unread_count(title);
+
+        // Assert
+        assert_eq!(result, 0);
+    }
+
+    #[test]
+    fn test_parse_unread_count_finds_correct_closing_paren_boundary() {
+        // Arrange: nested parens -- guards against find(')') -> find('(') swap;
+        // with correct logic the slice is "7", with find('(') the slice would be "7) Google Chat" which fails parse
+        let title = "(7)(extra)";
+
+        // Act
+        let result = parse_unread_count(title);
+
+        // Assert
+        assert_eq!(result, 7);
+    }
+}
