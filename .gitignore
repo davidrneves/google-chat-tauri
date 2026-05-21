@@ -26,6 +26,7 @@ dist-ssr
 # Cargo
 src-tauri/target
 src-tauri/gen
+src-tauri/mutants.out
 
 # Planning
 .planning/
