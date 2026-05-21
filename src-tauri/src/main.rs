@@ -6,6 +6,13 @@ use tauri::{
     tray::{MouseButton, MouseButtonState, TrayIconBuilder, TrayIconEvent},
     Emitter, Manager,
 };
+
+fn parse_unread_count(title: &str) -> u32 {
+    title.strip_prefix('(')
+        .and_then(|s| s.find(')').map(|i| &s[..i]))
+        .and_then(|n| n.parse().ok())
+        .unwrap_or(0)
+}
 #[cfg(target_os = "macos")]
 use window_vibrancy::{apply_vibrancy, NSVisualEffectMaterial};
 #[cfg(target_os = "windows")]
@@ -34,7 +41,7 @@ fn main() {
                 .items(&[&hide, &quit])
                 .build()?;
 
-            let _tray = TrayIconBuilder::new()
+            let _tray = TrayIconBuilder::with_id("main")
                 .menu(&menu)
                 .on_menu_event(|app, event| match event.id().as_ref() {
                     "quit" => {
@@ -81,6 +88,29 @@ fn main() {
 
             tauri::async_runtime::spawn(async move {
                 let _ = window.eval("window.location.replace('https://mail.google.com/chat/u/0')");
+            });
+
+            let poll_handle = app.handle().clone();
+            std::thread::spawn(move || {
+                let mut last_count: u32 = 0;
+                loop {
+                    std::thread::sleep(std::time::Duration::from_secs(5));
+                    let Some(win) = poll_handle.get_webview_window("main") else { continue };
+                    let count = win.title().ok()
+                        .map(|t| parse_unread_count(&t))
+                        .unwrap_or(0);
+                    if count != last_count {
+                        last_count = count;
+                        if let Some(tray) = poll_handle.tray_by_id("main") {
+                            let tooltip = if count > 0 {
+                                format!("Google Chat ({count} unread)")
+                            } else {
+                                "Google Chat".to_string()
+                            };
+                            let _ = tray.set_tooltip(Some(&tooltip));
+                        }
+                    }
+                }
             });
 
             Ok(())
