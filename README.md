@@ -54,7 +54,28 @@ Non-plans:
 - Turning this into a "big project" (it doesn't need to be)
 - Mobile builds
 
-Credits:
+## Building from Source
+
+**Prerequisites:**
+- [Rust](https://rustup.rs/) (stable toolchain)
+- [pnpm](https://pnpm.io/installation)
+- Tauri CLI (installed automatically via `pnpm install`)
+
+```sh
+git clone https://github.com/davidrneves/google-chat-tauri.git
+cd google-chat-tauri
+pnpm install
+pnpm tauri dev      # development build with hot-reload
+pnpm tauri build    # release build (output in src-tauri/target/release/)
+```
+
+## Contributing
+
+Bug reports and questions: [open an issue](https://github.com/davidrneves/google-chat-tauri/issues).
+
+For PRs: check [Non-plans](#non-plans) first. Small focused fixes are welcome; features outside everyday Google Chat use cases are not.
+
+## Credits
 
 - <https://github.com/squalou/google-chat-linux/> - Inspiration
 - `create-tauri-app` - Scaffolding template
