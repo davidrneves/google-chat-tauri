@@ -105,6 +105,10 @@ Bug reports and questions: [open an issue](https://github.com/davidrneves/google
 
 For code contributions: check [Non-plans](#non-plans) first to avoid wasted effort. Bug fixes and platform-specific improvements are most likely to be merged. For anything non-trivial, open an issue first to discuss before writing code.
 
+Especially welcome: Linux packaging improvements (Flatpak, Nix), platform-specific bug reports with reproduction steps, and corrections to docs.
+
+This is a side project maintained on a best-effort basis. Expect issue responses within a week; PR reviews may take longer.
+
 ## Credits
 
 - <https://github.com/squalou/google-chat-linux/> - Inspiration
