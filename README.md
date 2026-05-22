@@ -2,9 +2,16 @@
 
 Run Google Chat as a "real" application with Tauri
 
-## Download (Linux, Windows, macOS):
+## Download (Linux, Windows, macOS)
 
-<https://github.com/ThatOneCalculator/google-chat-tauri/releases/latest>
+Get the latest release from the [releases page](https://github.com/ThatOneCalculator/google-chat-tauri/releases/latest):
+
+| Platform | File | Notes |
+|----------|------|-------|
+| macOS | `.dmg` | Drag to Applications. On first launch, right-click → Open to bypass the unsigned-app warning. |
+| Windows | `.msi` or `.exe` | Run the installer. Windows may show a SmartScreen warning - click "More info" → "Run anyway". |
+| Linux | `.AppImage` | `chmod +x google-chat-tauri_*.AppImage && ./google-chat-tauri_*.AppImage` |
+| Linux | `.deb` / `.rpm` | Install with `dpkg -i` or `rpm -i` respectively. |
 
 ### AUR package (Arch Linux)
 
