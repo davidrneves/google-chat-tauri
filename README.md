@@ -41,20 +41,20 @@ Cons:
 
 ## Features
 
-- Linux, macOS, and Windows builds ([AUR: `google-chat-tauri-bin`](https://aur.archlinux.org/packages/google-chat-tauri-bin))
-- System tray with reactive unread count tooltip
-- Dock badge showing unread count (macOS only)
-- Native window materials: macOS vibrancy (frosted glass sidebar), Windows Mica
-- Native menu bar: File, View, Window menus
-- Desktop notifications
+- **Multi-platform builds** (Linux, macOS, Windows) — [AUR package: `google-chat-tauri-bin`](https://aur.archlinux.org/packages/google-chat-tauri-bin) for Arch-based distros.
+- **System tray** — stays in the tray when closed; tooltip shows current unread count in real time.
+- **Dock badge** (macOS only) — unread count badge on the dock icon. Not available on Windows/Linux: implemented via macOS Cocoa APIs (NSApplication dockTile) with no cross-platform equivalent.
+- **Native window materials** — macOS vibrancy (frosted glass sidebar), Windows Mica blur. Linux uses a standard window frame.
+- **Native menu bar** — File, View, and Window menus integrated into the OS menu bar (macOS) or window chrome.
+- **Desktop notifications** — Google Chat notifications delivered as native OS notifications.
 
 ## Roadmap
 
-- [ ] Flathub package
-- [ ] Custom CSS & JS injection
+- [ ] Flathub package *(lower priority than AUR; investigating packaging requirements)*
+- [ ] Custom CSS & JS injection *(investigating; no timeline)*
 - [ ] Custom settings
   - [ ] Config file
-  - [ ] Possibly injecting custom settings into web UI (low priority)
+  - [ ] Possibly injecting custom settings into web UI *(low priority)*
 
 ## Non-plans
 
