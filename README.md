@@ -19,6 +19,18 @@ Get the latest release from the [releases page](https://github.com/ThatOneCalcul
 yay -S google-chat-tauri-bin
 ```
 
+### Verify the install
+
+After launch you should see a system tray icon and the Google Chat interface load in the app window.
+
+**macOS - if right-click → Open does not bypass the warning**, run this in Terminal:
+
+```sh
+sudo xattr -cr /Applications/google-chat-tauri.app
+```
+
+Then launch again normally. This clears the quarantine flag macOS sets on downloaded apps.
+
 ---
 
 Tech stack:
