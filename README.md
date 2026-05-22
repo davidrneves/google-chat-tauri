@@ -54,7 +54,7 @@ Cons:
 ## Features
 
 - **Multi-platform builds** (Linux, macOS, Windows) — [AUR package: `google-chat-tauri-bin`](https://aur.archlinux.org/packages/google-chat-tauri-bin) for Arch-based distros.
-- **System tray** — stays in the tray when closed; tooltip shows current unread count in real time.
+- **System tray** — closing the window hides it to the tray (app keeps running). Tooltip shows current unread count. Use tray menu → Quit to exit.
 - **Dock badge** (macOS only) — unread count badge on the dock icon. Not available on Windows/Linux: implemented via macOS Cocoa APIs (NSApplication dockTile) with no cross-platform equivalent.
 - **Native window materials** — macOS vibrancy (frosted glass sidebar), Windows Mica blur. Linux uses a standard window frame.
 - **Native menu bar** — File, View, and Window menus integrated into the OS menu bar (macOS) or window chrome.
