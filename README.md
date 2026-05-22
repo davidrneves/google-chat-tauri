@@ -1,6 +1,6 @@
 # Google Chat Tauri
 
-Run Google Chat as a "real" application with Tauri
+Run Google Chat as a native desktop app — not Electron. 17MB binary, macOS vibrancy, Windows Mica, system tray, and desktop notifications.
 
 ## Download (Linux, Windows, macOS)
 
