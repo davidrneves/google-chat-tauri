@@ -39,23 +39,24 @@ Cons:
 
 - No support for third party auth
 
-Plans:
+## Features
 
-- [x] Linux, macOS, and Windows builds
-  - [x] [AUR package](https://aur.archlinux.org/packages/google-chat-tauri-bin)
-  - [ ] Flathub
-- [x] System tray
-  - [x] Reactive tooltip showing unread count
-  - [x] Dock/taskbar badge (macOS only; tauri-plugin-badging unavailable for v2)
-  - [x] Fix monochrome on non-macOS
-- [x] Native window materials (macOS vibrancy, Windows Mica)
-- [x] Native menu bar (File, View, Window)
-- [ ] Custom CSS & JS
+- Linux, macOS, and Windows builds ([AUR: `google-chat-tauri-bin`](https://aur.archlinux.org/packages/google-chat-tauri-bin))
+- System tray with reactive unread count tooltip
+- Dock badge showing unread count (macOS only)
+- Native window materials: macOS vibrancy (frosted glass sidebar), Windows Mica
+- Native menu bar: File, View, Window menus
+- Desktop notifications
+
+## Roadmap
+
+- [ ] Flathub package
+- [ ] Custom CSS & JS injection
 - [ ] Custom settings
   - [ ] Config file
   - [ ] Possibly injecting custom settings into web UI (low priority)
 
-Non-plans:
+## Non-plans
 
 - Adding features far outside of my use case or a "reasonable" use case
 - Turning this into a "big project" (it doesn't need to be)
