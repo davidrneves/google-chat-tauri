@@ -44,7 +44,7 @@ Obligatory screenshot:
 Pros:
 
 - Not Electron
-- Relatively small: 17MB AppImage binary (vs. 100MB+ for Electron-based alternatives), 488KB saved cache on Linux x86_64, as of v0.1.0. Memory: ~800-1000MB with one workspace open.
+- Relatively small: 17MB AppImage binary (vs. 100MB+ for Electron-based alternatives), 488KB saved cache on Linux x86_64 — as of v0.1.0, Tauri v2. Memory: ~800-1000MB steady-state with one workspace open (varies with number of open spaces; Google Chat's web app drives most of the usage).
 - Notifications
 
 Cons:
