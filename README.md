@@ -81,7 +81,7 @@ pnpm tauri build    # release build (output in src-tauri/target/release/)
 
 Bug reports and questions: [open an issue](https://github.com/davidrneves/google-chat-tauri/issues).
 
-For PRs: check [Non-plans](#non-plans) first. Small focused fixes are welcome; features outside everyday Google Chat use cases are not.
+For code contributions: check [Non-plans](#non-plans) first to avoid wasted effort. Bug fixes and platform-specific improvements are most likely to be merged. For anything non-trivial, open an issue first to discuss before writing code.
 
 ## Credits
 
