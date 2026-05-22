@@ -32,7 +32,7 @@ Obligatory screenshot:
 Pros:
 
 - Not Electron
-- Relatively small, both in file size (17MB AppImage binary and 488KB saved cache on Linux x86_64, as of v0.1.0) and memory usage (~800-1000MB with one workspace open)
+- Relatively small: 17MB AppImage binary (vs. 100MB+ for Electron-based alternatives), 488KB saved cache on Linux x86_64, as of v0.1.0. Memory: ~800-1000MB with one workspace open.
 - Notifications
 
 Cons:
