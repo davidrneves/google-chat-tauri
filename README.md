@@ -68,6 +68,16 @@ Cons:
 - [Rust](https://rustup.rs/) (stable toolchain)
 - [pnpm](https://pnpm.io/installation)
 - Tauri CLI (installed automatically via `pnpm install`)
+- **Linux only:** system libraries (see below)
+- **macOS only:** Xcode command line tools (`xcode-select --install`)
+
+**Linux system dependencies (Debian/Ubuntu):**
+
+```sh
+sudo apt install libwebkit2gtk-4.1-dev build-essential libssl-dev libayatana-appindicator3-dev librsvg2-dev
+```
+
+If `pnpm tauri dev` fails with `Package webkit2gtk-4.1 was not found`, this is the fix.
 
 ```sh
 git clone https://github.com/davidrneves/google-chat-tauri.git
