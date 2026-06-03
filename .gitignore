@@ -34,3 +34,9 @@ src-tauri/mutants.out
 # Claude Code
 .claude/
 
+
+# hookforge harness artifacts (generated, machine-local - run `hookforge init` to regenerate)
+.hookforge/
+.claude/
+CLAUDE.md
+scripts/session-tokens.js
