@@ -227,9 +227,31 @@ process.stdin.on('end', () => {
           fs.readSync(fd, buf, 0, readSize, stat.size - readSize);
           fs.closeSync(fd);
           const tail = buf.toString('utf8');
-          const matches = [...tail.matchAll(/"usage"\s*:\s*\{([^}]*)\}/g)];
-          if (matches.length > 0) {
-            try { lastUsage = JSON.parse('{' + matches[matches.length - 1][1] + '}'); } catch { /* malformed */ }
+          // Extract the last "usage" object via brace-balanced, string-aware scan.
+          // A naive [^}]* regex truncates at the first nested '}' because the usage
+          // object now contains nested objects (server_tool_use, cache_creation,
+          // iterations), producing invalid JSON and a null cost for every session.
+          let probe = tail.length;
+          while (probe >= 0) {
+            const keyIdx = tail.lastIndexOf('"usage"', probe);
+            if (keyIdx === -1) break;
+            const open = tail.indexOf('{', keyIdx + 7);
+            if (open === -1) { probe = keyIdx - 1; continue; }
+            let depth = 0, inStr = false, esc = false, close = -1;
+            for (let i = open; i < tail.length; i++) {
+              const ch = tail[i];
+              if (esc) { esc = false; continue; }
+              if (ch === '\\') { esc = true; continue; }
+              if (ch === '"') { inStr = !inStr; continue; }
+              if (inStr) continue;
+              if (ch === '{') depth++;
+              else if (ch === '}' && --depth === 0) { close = i; break; }
+            }
+            if (close !== -1) {
+              try { lastUsage = JSON.parse(tail.slice(open, close + 1)); } catch { lastUsage = null; }
+              if (lastUsage) break;
+            }
+            probe = keyIdx - 1;
           }
         } catch { /* transcript unreadable */ }
       }
