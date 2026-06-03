@@ -1,3 +1,4 @@
+<!-- BEGIN HOOKFORGE (managed - do not edit) -->
 # Hookforge Harness
 
 This project has the hookforge agent harness installed for Claude Code.
@@ -76,3 +77,4 @@ Default to the cheapest path that correctly handles the request.
 | `/web-ui-debug` | high | Classifies web UI bugs by type, routes to research-backed investigation strategies per category, and verifies fixes with a generator-evaluator pattern using Playwright. Composes systematic-debugging, qa, and live-preview. |
 | `/wiki` | medium | Builds and maintains a structured knowledge wiki from the codebase and campaign history. Uses the Karpathy llm-wiki ingest pattern - each document is a living page that accumulates related knowledge over time. |
 | `/workspace` | high | Multi-repo campaign coordinator. Runs fleet/archon inside each repository in dependency order. The unit of work is a repo, not a task. Use when the same change needs to touch multiple codebases simultaneously. |
+<!-- END HOOKFORGE -->
